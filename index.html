@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOUBLE GAME — Monday Morning</title>
+    <link rel="stylesheet" href="/src/style.css" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b1020'/%3E%3Ctext x='16' y='22' font-size='16' text-anchor='middle' fill='%23e8b93c' font-family='Arial' font-weight='bold'%3EDG%3C/text%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <div id="game-root">
+      <canvas id="game-canvas"></canvas>
+
+      <!-- HUD -->
+      <div id="hud" class="hidden">
+        <div id="objective-panel">
+          <div class="objective-kicker">OBJECTIVE</div>
+          <div id="objective-text">—</div>
+          <div id="objective-sub" class="hidden"></div>
+        </div>
+        <div id="clock-panel">MON <span id="clock-text">09:02</span></div>
+        <div id="compass" class="hidden"><div id="compass-arrow">➤</div><div id="compass-dist"></div></div>
+        <div id="interact-prompt" class="hidden"><span class="key">E</span><span id="interact-label"></span></div>
+        <div id="controls-hint">
+          <b>WASD</b> move · <b>Shift</b> sprint · <b>Space</b> jump · <b>E</b> interact ·
+          <b>Tab</b> notebook · <b>Esc</b> pause
+        </div>
+        <div id="toast-wrap"></div>
+      </div>
+
+      <!-- Letterbox cinematic bars -->
+      <div id="letterbox"><div class="bar top"></div><div class="bar bottom"></div></div>
+
+      <!-- Dialogue -->
+      <div id="dialogue" class="hidden">
+        <div id="dialogue-speaker"></div>
+        <div id="dialogue-text"></div>
+        <div id="dialogue-choices"></div>
+        <div id="dialogue-continue">▼ continue <span class="key small">E / Space / Click</span></div>
+      </div>
+
+      <!-- Notebook -->
+      <div id="notebook" class="overlay hidden">
+        <div class="overlay-panel notebook-panel">
+          <div class="overlay-head">
+            <h2>AKSHAY'S NOTEBOOK</h2>
+            <button class="close-btn" data-close="notebook">✕ close <span class="key small">Tab</span></button>
+          </div>
+          <div class="nb-tabs">
+            <button class="nb-tab active" data-tab="clues">Clues</button>
+            <button class="nb-tab" data-tab="deduce">Deduce</button>
+            <button class="nb-tab" data-tab="keerthy">Keerthy</button>
+          </div>
+          <div id="nb-clues" class="nb-body"></div>
+          <div id="nb-deduce" class="nb-body hidden"></div>
+          <div id="nb-keerthy" class="nb-body hidden"></div>
+        </div>
+      </div>
+
+      <!-- Bank terminal -->
+      <div id="terminal" class="overlay hidden"></div>
+
+      <!-- Evidence viewer -->
+      <div id="evidence-view" class="overlay hidden"></div>
+
+      <!-- Phone -->
+      <div id="phone" class="overlay hidden">
+        <div class="phone-device">
+          <div class="phone-notch"></div>
+          <div class="phone-head"><span id="phone-from"></span><span class="phone-time" id="phone-time"></span></div>
+          <div id="phone-body"></div>
+          <button id="phone-ok">OK</button>
+        </div>
+      </div>
+
+      <!-- Mission complete card -->
+      <div id="mission-card" class="overlay hidden"></div>
+
+      <!-- Intro / title / pause -->
+      <div id="menu" class="overlay"></div>
+
+      <!-- Fade -->
+      <div id="fade"></div>
+
+      <!-- Pointer lock helper -->
+      <div id="click-to-play" class="hidden">Click to take control</div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

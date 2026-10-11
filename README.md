@@ -1,76 +1,133 @@
-# DoubleGame
-DOUBLE GAME is a cinematic open-world action-adventure game set in Hyderabad. Play as Akshay, a clever banker with a secret identity, uncover financial conspiracies, navigate romance and comedy, and face Prithviraj in a thrilling multi-level story full of action, twists, and mystery.
 # DOUBLE GAME 🎮
 
 **One man. Two identities. A billion-rupee secret.**
 
-DOUBLE GAME is an original cinematic open-world action-adventure game inspired by the storytelling, immersive gameplay, realistic animations, and seamless cinematic transitions of high-quality open-world games. Set in a fictionalized version of Hyderabad, the game blends financial crime, romance, comedy, investigation, stealth, and action into a multi-level interactive experience.
+DOUBLE GAME is an original cinematic open-world action-adventure game set in a fictionalized
+version of Hyderabad, India. You play **Akshay**, a sharp-eyed bank employee who stumbles into a
+financial conspiracy — and into **Keerthy**, an architect with a sketchbook and a cancelled payment
+order that matches the anomaly to the rupee.
+
+Built with **TypeScript + Three.js + Vite**, playable in the browser, keyboard + mouse.
+
+> GTA V is referenced only as a broad genre benchmark for open-world freedom and cinematic
+> presentation. All characters, locations, missions, visuals and audio here are original.
+
+---
+
+## ▶️ Play now (Milestone 1 — vertical slice)
+
+```bash
+npm install
+npm run dev
+```
+
+Open the printed URL (default http://localhost:5173), click **NEW GAME**, and play
+**Mission 1: Monday Morning** end to end (~10–15 minutes):
+
+commute → bank → the ₹49,900 anomaly → Meera → Naveen → lunch at Charminar Chai Co. →
+meet Keerthy → a shared activity (walk or café) → the Kaveri thread → the hook.
+
+Progress auto-saves at every objective; **Continue** on the title screen resumes it.
+
+### Controls
+
+| Key | Action |
+| --- | --- |
+| **WASD** | Move (relative to camera) |
+| **Mouse** | Camera — pointer-lock, or drag if the browser denies it |
+| **Shift** | Sprint |
+| **Space** | Jump |
+| **E** | Interact / advance dialogue |
+| **1–3** | Pick dialogue choices |
+| **Tab** | Notebook — clues, deduction board, Keerthy page |
+| **Esc** | Pause (save, mute, quit) |
+
+---
+
+## 🧩 What's actually in this slice
+
+**Playable systems (all verified by automated runtime playthrough, see Testing):**
+
+- Third-person Akshay controller: walk/sprint/jump, capsule collision vs. the world,
+  wall-sliding, step-up, camera orbit with world collision (no clipping through walls).
+- A compact open district: Street One with traffic, pedestrians, trees, lamps, parked cars,
+  Akshay's apartment block, shops, **Janapriya Bank** (full interior: counters, desks, glass
+  manager cabin, server room), **Charminar Chai Co.** and the plaza with the *Two Ledgers* mural.
+- **Financial investigation**: a working CORE-banking terminal (inspect rows, file an anomaly
+  report), physical evidence (the discarded remittance slip), testimony from colleagues, and a
+  notebook with a real deduction board — connect two clues to unlock conclusions
+  (`E1+E3 → The Blind Window`, `D1+E4 → The Kaveri Thread`). Evidence is tagged by reliability
+  (confirmed record / testimony / physical / document).
+- **Keerthy & the romance**: a full authored encounter with playful/sincere/awkward openers,
+  an honesty choice with lasting consequences, a promise (Friday's exhibition), and a playable
+  shared activity — she leads a walk to her mural, pausing with quips if you lag. Her discovery
+  of the cancelled ₹49,900 payment is grounded in her own email, not magic knowledge.
+- **Relationship state**: trust, closeness, suspicion, promises, shared memories, revelations and
+  "what Keerthy believes" — tracked separately and shown in the notebook; the ending texts change
+  with your honesty choice (honest → she sends the payment-order document = evidence E6).
+- **Mission flow**: objectives + compass beacon, mission start/completion card, auto-save,
+  manual save, and full save/resume from the title screen.
+- **Hook cinematic**: black sedan, Naveen's warning, compliance email, Keerthy's message,
+  "NEXT — Mission 2: The Missing Amount".
+- Original procedural audio (Web Audio API): ambient city pad, footsteps, UI and story stingers.
+
+**Deliberately not in Milestone 1** (per the milestone plan): driving, R/dual-identity system,
+Naveen as a follower, Prithviraj's active interference, missions 2–15, map screen, more districts.
+
+---
+
+## 🏗️ Architecture
+
+```
+src/
+  core/        engine (renderer/lights/loop), input, audio, collision (AABB + triggers), save
+  systems/     relationship.ts, investigation.ts (pure logic, node-testable), dialogue types
+  data/        content.ts (evidence/deductions), mission1.ts (dialogue graphs, objectives, phones)
+  world/       build.ts — city block, bank, café, plaza, props, colliders, triggers
+  entities/    humanoid (procedural characters + animation), player controller, NPCs
+  ui/          hud, dialogue runner, notebook, bank terminal, phone/menus/mission card
+  game.ts      orchestrator: phase machine, effects, walk-AI, cinematics, save/load
+tests/
+  logic.test.mts    pure-logic unit tests (relationship, investigation, content integrity)
+  runtime.test.mts  headless full-playthrough test (jsdom + stubbed WebGL): boots the real game
+                    and script-plays Mission 1 with simulated input, verifying every phase,
+                    dialogue, clue, deduction, phone, cinematic and save/resume round-trip
+```
+
+## ✅ Testing
+
+```bash
+npm run typecheck      # strict TS
+npm test               # pure-logic unit tests
+npm run test:runtime   # headless scripted playthrough of the whole slice
+npm run build          # production build
+```
+
+The runtime test cannot exercise the GPU (this repo's CI has no browser binary), so rendering is
+verified by build + manual preview, while everything else — movement, collision, reachability of
+every objective, mission phases, dialogue branching, terminal, notebook deductions, cinematics,
+phone overlays and save/resume — is executed for real against the game code.
+
+## 🗺️ Roadmap
+
+Milestone 1 (this) → **Milestone 2**: deeper investigation, timeline reconstruction, framing &
+escape (Missions 2–3) → **Milestone 3**: R + Naveen, cover stories, infiltration (Missions 4–6) →
+**Milestone 4**: driving, city expansion (Missions 7–9) → **Milestone 5**: Prithviraj, finale,
+sequel hook (Missions 10–15) → **Milestone 6**: polish & release.
+
+---
 
 ## 📖 Story
 
-Akshay, an intelligent and ambitious bank employee, discovers suspicious financial transactions that connect to a powerful criminal network. When he is framed for a crime he never committed, he creates an alternate identity known as **R** to infiltrate the network and uncover the truth.
+Akshay, an intelligent and ambitious bank employee, discovers suspicious financial transactions
+that connect to a powerful criminal network. When he is framed for a crime he never committed, he
+creates an alternate identity known as **R** to infiltrate the network and uncover the truth.
 
-With the help of Naveen, a witty and resourceful investigator, Akshay navigates dangerous investigations, hilarious disguises, romantic complications, and encounters with Prithviraj, a powerful kingmaker who operates behind a respectable public image.
-
-Meanwhile, Keerthy enters Akshay's life, creating an emotional conflict between love and deception. As the investigation deepens, Akshay discovers that the conspiracy may be connected to events that occurred before his investigation even began.
+With the help of **Naveen**, a witty and resourceful investigator, Akshay navigates dangerous
+investigations, hilarious disguises, romantic complications, and encounters with **Prithviraj**,
+a powerful kingmaker who operates behind a respectable public image. Meanwhile, **Keerthy** enters
+Akshay's life, creating an emotional conflict between love and deception.
 
 Every clue brings him closer to the truth—and deeper into a game he may not control.
-
-## 🕹️ Key Features
-
-- **Cinematic third-person gameplay:** Experience the story through Akshay's perspective with responsive movement, immersive camera work, and cinematic storytelling.
-- **Multi-level campaign:** Progress through interconnected missions involving banking, investigation, romance, stealth, driving, and action.
-- **Dual identity system:** Switch between Akshay and his alternate persona, R, with different dialogue, social access, and suspicion levels.
-- **Financial investigation:** Analyze suspicious transactions, collect evidence, connect clues, and uncover the hidden conspiracy.
-- **Romance and comedy:** Experience playful interactions, relationship choices, disguise mishaps, and humorous missions with Keerthy and Naveen.
-- **Dynamic open world:** Explore a fictionalized Hyderabad with urban streets, financial districts, markets, corporate offices, and industrial locations.
-- **Realistic animation and physics:** Aim for natural movement, contextual interactions, believable environmental reactions, and smooth gameplay-to-cutscene transitions.
-- **Meaningful decisions:** Player actions influence relationships, investigation paths, mission outcomes, and selected story details.
-- **Intelligent characters:** Build distinct NPC behaviours, investigation logic, suspicion systems, and adaptive reactions.
-- **Sequel-setting mystery:** Uncover clues suggesting that the conspiracy is larger than Akshay initially imagined.
-
-## 👥 Main Characters
-
-- **Akshay:** A clever bank employee whose financial expertise becomes his greatest weapon.
-- **Keerthy:** An independent, expressive, and witty romantic lead who challenges Akshay's dishonesty.
-- **Prithviraj:** A calculating and influential antagonist who manipulates the financial network from behind the scenes.
-- **Naveen:** Akshay's funny, observant, and intelligent investigative partner.
-- **R:** Akshay's alternate identity, created to infiltrate the conspiracy.
-
-## 🎯 Mission Structure
-
-The campaign is planned across five acts:
-
-1. **The Perfect Employee** — Discover the financial anomaly and become the target of a conspiracy.
-2. **The Birth of R** — Develop a disguise, infiltrate social circles, and navigate romantic complications.
-3. **The Money Trail** — Investigate clues, uncover connections, and survive escalating threats.
-4. **The Man Behind the Board** — Confront Prithviraj's influence and face the consequences of deception.
-5. **Double Game** — Execute the final plan, expose part of the conspiracy, and discover a mystery that sets up a sequel.
-
-## 🛠️ Development Goals
-
-The project aims to develop:
-
-- A polished third-person controller and camera system.
-- Modular mission and dialogue systems.
-- Interactive environments and contextual animations.
-- A dual-identity and suspicion mechanic.
-- Investigation and evidence-management gameplay.
-- Vehicle handling and cinematic pursuit sequences.
-- Relationship progression and meaningful choices.
-- Save/load functionality and mission checkpoints.
-- A scalable open-world architecture.
-
-## 🚧 Development Status
-
-**Concept and pre-production**
-
-The story, characters, mission structure, and gameplay direction are being developed. Technical implementation, assets, and playable systems will be added as development progresses.
-
-## 🌟 Vision
-
-DOUBLE GAME aims to deliver an original, character-driven open-world experience where financial intelligence, deception, romance, comedy, and action are connected through a cinematic story.
-
-The objective is not simply to create another open-world crime game, but to build a distinctive interactive experience where every identity has consequences, every clue matters, and every victory may conceal a bigger game.
 
 **The question is not who is playing the game. It's who created it.**
